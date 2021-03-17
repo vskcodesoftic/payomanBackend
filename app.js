@@ -8,6 +8,9 @@ const HttpError = require('./models/http-error')
 
 const homepageRoutes = require('./routes/home-routes')
 
+//merchanchantRoutes
+const merchantPageRoutes = require('./routes/merchant-routes')
+
 const app = express();
 
 //body parsing jsonData
@@ -28,6 +31,10 @@ app.use((req, res, next) => {
 
 
 app.use(homepageRoutes);
+
+//merchantPage Routes
+app.use('/api/merchant/', merchantPageRoutes);
+
 
 
 app.use((req, res, next)=>{
