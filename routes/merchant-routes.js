@@ -26,8 +26,8 @@ router.post('/signup',
 //merchantlogin
 router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpty()], merchantController.merchantLogin)
 
-//update paswd
-router.post('/u' ,[ check('email').isEmail(), check('password').not().isEmpty()], merchantController.updateMerchantPassword)
+//update MERCHANT PASSWORD
+router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], merchantController.updateMerchantPassword)
 
 
 module.exports = router;
