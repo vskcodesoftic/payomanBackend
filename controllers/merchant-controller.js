@@ -1,11 +1,17 @@
 
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+
 
 const { validationResult } = require('express-validator')
 const  Merchant = require('../models/merchant-schema')
 
 const HttpError = require('../models/http-error');
+
+const {  sendEmail  ,sendEmailOtpLink } = require('../services/mail.service');
+
 
 //merchant signup
 
@@ -148,7 +154,7 @@ res.json({
 }
 
 
-//update password 
+//update merchant password 
 const  updateMerchantPassword = async(req, res, next) => {
     const { email, oldpassword , newpassword } = req.body;
 
@@ -206,9 +212,70 @@ catch(err){
 }
 
 
+//forget merchant password 
+const  forgetMerchantPassword = async(req, res, next) => {
+    const { email } = req.body;
+    crypto.randomBytes(32,(err,buffer)=>{
+        if(err){
+            console.log(err)
+        }
+        const token = buffer.toString("hex")
+        Merchant.findOne({email:req.body.email})
+        .then(user=>{
+            if(!user){
+                return res.status(422).json({error:"User dont exists with that email"})
+            }
+            user.resetToken = token
+            user.expireToken = Date.now() + 3600000
+            user.save().then((result)=>{
+          
+           sendEmailOtpLink(
+                    user.email,
+                    token 
+                    
+                )
+                res.json({message:"check your email", token : token})
+  
+            })
+           
+  
+        })
+    })
+
+}
+
+// new password reset link when user clicks
+
+const newPasswordReset = async(req,res,next) => {
+    
+        const newPassword = req.body.password
+        const sentToken = req.body.token
+        Merchant.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+        .then(user=>{
+            if(!user){
+                return res.status(422).json({error:"Try again session expired"})
+            }
+            bcrypt.hash(newPassword,12).then(hashedpassword=>{
+               user.password = hashedpassword
+               user.resetToken = undefined
+               user.expireToken = undefined
+               user.save().then((saveduser)=>{
+                   res.json({message:"password updated success"})
+               })
+            })
+        }).catch(err=>{
+            console.log(err)
+        })
+    
+
+}
+
 
 
 
 exports.createMerchant =    createMerchant;
 exports.merchantLogin = merchantLogin;
 exports.updateMerchantPassword = updateMerchantPassword;
+exports.forgetMerchantPassword = forgetMerchantPassword;
+
+exports.newPasswordReset = newPasswordReset;

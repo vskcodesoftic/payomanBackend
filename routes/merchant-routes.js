@@ -29,5 +29,11 @@ router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpt
 //update MERCHANT PASSWORD
 router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], merchantController.updateMerchantPassword)
 
+//Forget Merchant Password
+router.post('/forgetPassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], merchantController.updateMerchantPassword)
 
+//PASSWORD RESET LINK
+router.post('/resetPasswordLink',merchantController.forgetMerchantPassword);
+
+router.post('/changePass', merchantController.newPasswordReset);
 module.exports = router;
