@@ -30,4 +30,7 @@ router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpt
 //update CustomerPassword 
 router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], customerController.updateCustomerPassword)
 
+//update Profile (picture)
+router.post('/profile',fileUpload.single('profilePic'), customerController.updateMerchantProfile);
+
 module.exports = router;
