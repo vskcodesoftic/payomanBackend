@@ -380,10 +380,77 @@ const getMerchantBankDetails = async(req,res ,next) => {
         return next(error)
     }
 
+    if(merchant.accountNumber === 'null')
+    {
+       res.json({message : "empty"}) 
+    }
     res.json({ message : "BankDetails of merchant", accountNumber : merchant.accountNumber , bankName : merchant.bankName, swiftCode : merchant.swiftCode })
 }
 
 
+//profile updated 
+const updateMerchantProfile = async (req,res,next) => {
+    const { accountNumber, bankName, swiftCode ,userId } = req.body;
+     
+    let existingUser
+    try{
+         existingUser = await Merchant.findOne({ _id : userId })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, updating failed",500)
+        return next(error)
+    }
+    if(!existingUser){
+        const error = new HttpError("user not exists",422)
+        return next(error)
+    }
+
+      //updating
+      let user
+      try {
+       user = await Merchant.updateOne(
+          { _id: userId },
+          {
+            accountNumber, 
+            bankName,
+            swiftCode ,
+            profilePic : req.file.path 
+          }
+        );
+      }
+      catch(err){
+          console.log("error",err)
+          const error = await new HttpError("something went wrong, in failed",500)
+          return next(error)
+        }
+        if(!user){
+          const error = new HttpError("merchant not found could not update profile details",401)
+          return next(error)
+        }
+
+ res.json({message :" profile updated "})
+
+   
+}
+
+
+// get complete merchant details 
+const getCompleteMerchantDetails = async (req, res, next) => {
+    const { userId  } = req.body;
+    let merchant
+    try{
+         merchant = await Merchant.findOne({ _id : userId })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, updating failed",500)
+        return next(error)
+    }
+    if(!merchant){
+        const error = new HttpError("user not exists",422)
+        return next(error)
+    }
+    res.json({ message : " complete details of merchant", name : merchant.name, email : merchant.email , businessName : merchant.businessName, countryCode : merchant.countryCode , phoneNumber : merchant.phoneNumber , accountNumber : merchant.accountNumber, swiftCode :merchant.swiftCode ,bankName : merchant.bankName })
+}
 
 exports.createMerchant =    createMerchant;
 exports.merchantLogin = merchantLogin;
@@ -393,3 +460,5 @@ exports.newPasswordReset = newPasswordReset;
 exports.bankDetails = bankDetails;
 exports.getRemainingBalance = getRemainingBalance;
 exports.getMerchantBankDetails = getMerchantBankDetails;
+exports.updateMerchantProfile = updateMerchantProfile;
+exports.getCompleteMerchantDetails = getCompleteMerchantDetails;

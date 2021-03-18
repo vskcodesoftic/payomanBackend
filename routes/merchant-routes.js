@@ -5,6 +5,8 @@ const router = express.Router();
 
 const merchantController = require('../controllers/merchant-controller')
 
+const fileUpload =require('../middleware/fileUpload')
+
 
 router.get('/', (req, res, next) => {
  
@@ -46,5 +48,11 @@ router.post('/remainingBalance',merchantController.getRemainingBalance);
 
 //get merchant bank Details
 router.post('/getMerchantBankDetails',merchantController.getMerchantBankDetails);
+
+//update merchant profile
+router.post('/profile',fileUpload.single('profilePic'), merchantController.updateMerchantProfile);
+
+//get full merchant details 
+router.post('/completeProfile',merchantController.getCompleteMerchantDetails);
 
 module.exports = router;
