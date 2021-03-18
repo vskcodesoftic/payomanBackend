@@ -295,7 +295,7 @@ const newPasswordReset = async(req,res,next) => {
 
 }
 
-//update pro
+//update BankDetails of Merchant 
 const bankDetails = async(req,res,next) => { 
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -343,9 +343,53 @@ const bankDetails = async(req,res,next) => {
      res.json({message : "updated bankdetails sucessfully"})
 }
 
+//showing remaing Balance of Merchant
+const getRemainingBalance = async(req,res ,next) => {
+    const { userId  } = req.body;
+    let merchant
+    try{
+         merchant = await Merchant.findOne({ _id : userId  })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, request failed",500)
+        return next(error)
+    }
+
+    if(!merchant){
+        const error = new HttpError("merchant not found could not get remaing balance",401)
+        return next(error)
+    }
+
+    res.json({ message : "remaingBalance of merchant", Balance : merchant.Balance , email : merchant.email })
+}
+
+//get Merchant Bank Details
+const getMerchantBankDetails = async(req,res ,next) => {
+    const { userId  } = req.body;
+    let merchant
+    try{
+         merchant = await Merchant.findOne({ _id : userId  })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, request failed",500)
+        return next(error)
+    }
+
+    if(!merchant){
+        const error = new HttpError("merchant not found could not get remaing balance",401)
+        return next(error)
+    }
+
+    res.json({ message : "BankDetails of merchant", accountNumber : merchant.accountNumber , bankName : merchant.bankName, swiftCode : merchant.swiftCode })
+}
+
+
+
 exports.createMerchant =    createMerchant;
 exports.merchantLogin = merchantLogin;
 exports.updateMerchantPassword = updateMerchantPassword;
 exports.forgetMerchantPassword = forgetMerchantPassword;
 exports.newPasswordReset = newPasswordReset;
 exports.bankDetails = bankDetails;
+exports.getRemainingBalance = getRemainingBalance;
+exports.getMerchantBankDetails = getMerchantBankDetails;

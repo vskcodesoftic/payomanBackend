@@ -16,7 +16,8 @@ const merchantSchema = new Schema({
     profilePic :{type:String}  ,
     accountNumber :{type :Number} ,
     bankName : { type: String },
-    swiftCode : { type : String }
+    swiftCode : { type : String },
+    Balance :{ type :Number, default: '00'}
 }, { versionKey: false });
 
 merchantSchema.plugin(uniqueValidator)
