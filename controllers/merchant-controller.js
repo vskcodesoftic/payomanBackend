@@ -212,8 +212,8 @@ try{
  }
 
  Merchant.findByIdAndUpdate(foundMerchant, { $set: updatedRecord },{new:true}, (err, docs) => {
-     if (!err) res.send(docs)
-     else console.log('Error while updating a record : ' + JSON.stringify(err, undefined, 2))
+    if (!err) res.json({mesage : "password updated sucessfully"})
+    else console.log('Error while updating a record : ' + JSON.stringify(err, undefined, 2))
  })
 } 
 catch(err){

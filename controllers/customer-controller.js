@@ -161,6 +161,68 @@ res.json({
 }
 
 
+//update customer password 
+const  updateCustomerPassword = async(req, res, next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
+    const { email, oldpassword , newpassword } = req.body;
+
+    let customer
+    try{
+         customer = await Customer.findOne({ email : email  })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong,update password in failed",500)
+        return next(error)
+    }
+
+    if(!customer){
+        const error = new HttpError("customer not found could not update password",401)
+        return next(error)
+    }
+  
+   let isValidPassword = false; 
+   try{
+         isValidPassword = await bcrypt.compare(oldpassword, customer.password)
+   }
+   catch(err){
+    const error = await new HttpError("invalid password try again",500)
+    return next(error)
+}
+
+
+if(!isValidPassword){
+    const error = new HttpError("invalid old password could not update newpassword",401)
+    return next(error)
+}
+
+let hashedPassword;
+  
+try{
+ hashedPassword = await bcrypt.hash(newpassword, 12)
+ let foundcustomer;
+ foundcustomer = await Customer.findOne({ email : email  })
+  
+ var updatedRecord = {
+     password: hashedPassword
+ }
+
+ Customer.findByIdAndUpdate(foundcustomer, { $set: updatedRecord },{new:true}, (err, docs) => {
+     if (!err) res.json({mesage : "password updated sucessfully"})
+     else console.log('Error while updating a record : ' + JSON.stringify(err, undefined, 2))
+ })
+} 
+catch(err){
+    const error = new HttpError("could not updated hash of customer ",500);
+    return next(error)
+}
+
+
+}
 
 
 
@@ -168,3 +230,4 @@ res.json({
 
 exports.createCustomer =    createCustomer;
 exports.customerLogin = customerLogin;
+exports.updateCustomerPassword = updateCustomerPassword; 

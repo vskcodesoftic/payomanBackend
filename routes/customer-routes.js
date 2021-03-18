@@ -24,7 +24,10 @@ router.post('/signup',
 ],customerController.createCustomer);
 
 
-//merchantlogin
+//customerlogin
 router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpty()], customerController.customerLogin)
+
+//update CustomerPassword 
+router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], customerController.updateCustomerPassword)
 
 module.exports = router;
