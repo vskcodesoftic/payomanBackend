@@ -13,7 +13,10 @@ const merchantSchema = new Schema({
     otpHex: { type: String },
     resetToken:{ type:String },
     expireToken:{ type:Date },
-    profilePic :{type:String}    
+    profilePic :{type:String}  ,
+    accountNumber :{type :Number} ,
+    bankName : { type: String },
+    swiftCode : { type : String }
 }, { versionKey: false });
 
 merchantSchema.plugin(uniqueValidator)

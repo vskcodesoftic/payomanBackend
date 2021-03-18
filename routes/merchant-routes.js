@@ -35,5 +35,10 @@ router.post('/forgetPassword' ,[ check('email').isEmail(), check('oldpassword').
 //PASSWORD RESET LINK
 router.post('/resetPasswordLink',merchantController.forgetMerchantPassword);
 
-router.post('/changePass', merchantController.newPasswordReset);
+//new password rest link , when user clicks link in the email
+router.post('/changePassword', merchantController.newPasswordReset);
+
+// Reciveng BankDetails Of Merchant
+router.post('/bankDetails',[ check('accountNumber').not().isEmpty()] ,merchantController.bankDetails)
+
 module.exports = router;

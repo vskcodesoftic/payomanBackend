@@ -270,12 +270,51 @@ const newPasswordReset = async(req,res,next) => {
 
 }
 
+//update pro
+const bankDetails = async(req,res,next) => { 
+    const { userId  , accountNumber , bankName, swiftCode } = req.body;
 
+    let merchant
+    try{
+         merchant = await Merchant.findOne({ _id : userId  })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, in failed",500)
+        return next(error)
+    }
 
+    if(!merchant){
+        const error = new HttpError("merchant not found could not update bank details",401)
+        return next(error)
+    }
+
+    //updating
+    let user
+    try {
+     user = await Merchant.updateOne(
+        { _id: userId },
+        {
+          accountNumber, 
+          bankName,
+          swiftCode   
+        }
+      );
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, in failed",500)
+        return next(error)
+      }
+      if(!user){
+        const error = new HttpError("merchant not found could not update bank details",401)
+        return next(error)
+      }
+ 
+     res.json({message : "updated bankdetails sucessfully"})
+}
 
 exports.createMerchant =    createMerchant;
 exports.merchantLogin = merchantLogin;
 exports.updateMerchantPassword = updateMerchantPassword;
 exports.forgetMerchantPassword = forgetMerchantPassword;
-
 exports.newPasswordReset = newPasswordReset;
+exports.bankDetails = bankDetails;

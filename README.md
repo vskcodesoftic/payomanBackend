@@ -12,7 +12,7 @@ Open endpoints require no Authentication.
 [merchantLogin] : `POST /api/merchant/login`
 [merchantSignup] : `POST /api/merchant/signup`
 [updatePassword] : `POST /api/merchant/updatePassword`
-[forgetPassword] : `POST /api/merchant//forgotPassword`
+[forgetPassword] : `POST /api/merchant/forgotPassword`
 
 do replace weburl with actual production url   >services>mail.service.js
 
