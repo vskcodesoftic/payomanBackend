@@ -11,6 +11,9 @@ const homepageRoutes = require('./routes/home-routes')
 //merchanchantRoutes
 const merchantPageRoutes = require('./routes/merchant-routes')
 
+//customerPageRoutes
+const customerPageRoutes = require('./routes/customer-routes')
+
 const app = express();
 
 //body parsing jsonData
@@ -35,7 +38,8 @@ app.use(homepageRoutes);
 //merchantPage Routes
 app.use('/api/merchant/', merchantPageRoutes);
 
-
+//customer Routes
+app.use('/api/customer/',customerPageRoutes);
 
 app.use((req, res, next)=>{
     const error = new HttpError('could not found this Route', 404);

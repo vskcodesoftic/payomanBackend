@@ -3,23 +3,19 @@ const uniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema;
 
 
-const merchantSchema = new Schema({
+const customerSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true , unique : true},
     password: { type: String , required: true},
-    businessName :{ type :String, required : true },
+    profilePic :{type: String },
+    pin : {type :Number, required : true },
     countryCode : {type : Number, required : true},
     phoneNumber : { type : Number, required : true},
     resetToken:{ type:String },
-    expireToken:{ type:Date },
-    profilePic :{type:String}  ,
-    accountNumber :{type :Number} ,
-    bankName : { type: String },
-    swiftCode : { type : String },
-    Balance :{ type :Number, default: '00'}
+    expireToken:{ type:Date }
 }, { versionKey: false });
 
-merchantSchema.plugin(uniqueValidator)
+customerSchema.plugin(uniqueValidator)
 
 
-module.exports = mongoose.model('Merchant', merchantSchema);
+module.exports = mongoose.model('Customer', customerSchema);
