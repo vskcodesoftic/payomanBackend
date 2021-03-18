@@ -39,6 +39,6 @@ router.post('/resetPasswordLink',merchantController.forgetMerchantPassword);
 router.post('/changePassword', merchantController.newPasswordReset);
 
 // Reciveng BankDetails Of Merchant
-router.post('/bankDetails',[ check('accountNumber').not().isEmpty()] ,merchantController.bankDetails)
+router.post('/bankDetails',[ check('accountNumber').not().isEmpty(),check('swiftCode').not().isEmpty(),check('bankName').not().isEmpty()] ,merchantController.bankDetails)
 
 module.exports = router;

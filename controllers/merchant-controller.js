@@ -97,6 +97,13 @@ const createMerchant = async (req, res, next) => {
 
 //Merchant login 
 const  merchantLogin = async(req, res, next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
+
     const { email,password } = req.body;
 
     let merchant
@@ -156,6 +163,12 @@ res.json({
 
 //update merchant password 
 const  updateMerchantPassword = async(req, res, next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
     const { email, oldpassword , newpassword } = req.body;
 
     let merchant
@@ -214,6 +227,12 @@ catch(err){
 
 //forget merchant password 
 const  forgetMerchantPassword = async(req, res, next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
     const { email } = req.body;
     crypto.randomBytes(32,(err,buffer)=>{
         if(err){
@@ -247,6 +266,12 @@ const  forgetMerchantPassword = async(req, res, next) => {
 // new password reset link when user clicks
 
 const newPasswordReset = async(req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
     
         const newPassword = req.body.password
         const sentToken = req.body.token
@@ -272,6 +297,12 @@ const newPasswordReset = async(req,res,next) => {
 
 //update pro
 const bankDetails = async(req,res,next) => { 
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
     const { userId  , accountNumber , bankName, swiftCode } = req.body;
 
     let merchant
