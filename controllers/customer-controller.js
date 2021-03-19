@@ -268,10 +268,7 @@ const updateCustomerProfile = async(req, res, next) => {
 }
 
 
-const protectedRoute = (req, res, next) => {
-    const email = req.userData.userId
-    res.json({message : "protected route", userId : email})
-}
+
 
 
 exports.createCustomer =    createCustomer;
