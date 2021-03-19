@@ -37,9 +37,12 @@ router.post('/updatePassword'  ,[ check('email').isEmail(), check('oldpassword')
  router.post('/profile', checkAuth , fileUpload.single('profilePic'), customerController.updateCustomerProfile);
 
 //Forget Customer Password
-router.post('/forgetPassword' ,[ check('email').isEmail()], customerController.forgetCustomerPassword)
+router.post('/forgetPassword' ,[ check('email').isEmail()], customerController.forgetCustomerPassword);
 
 //newPassword Reset after reciving resetLink on email
-router.post('/resetPasswordLink', customerController.newPasswordReset);
+router.post('/resetPasswordLink/:token', customerController.newPasswordReset);
+
+// get profile details of customer 
+router.get('/profile', checkAuth ,customerController.getProfileDetails);
 
 module.exports = router;

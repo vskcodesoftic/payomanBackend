@@ -7,6 +7,7 @@ const merchantController = require('../controllers/merchant-controller')
 
 const fileUpload =require('../middleware/fileUpload')
 
+const checkAuth = require('../middleware/authService');
 
 router.get('/', (req, res, next) => {
  
@@ -25,6 +26,7 @@ router.post('/signup',
 ],merchantController.createMerchant);
 
 
+
 //merchantlogin
 router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpty()], merchantController.merchantLogin)
 
@@ -36,21 +38,21 @@ router.post('/forgetPassword' ,[ check('email').isEmail()], merchantController.f
 
 
 //new password rest link , when user clicks link in the email
-router.post('/resetPasswordLink', merchantController.newPasswordReset);
+router.post('/resetPasswordLink/:token', merchantController.newPasswordReset);
 
 // Reciveng BankDetails Of Merchant
-router.post('/bankDetails',[ check('accountNumber').not().isEmpty(),check('swiftCode').not().isEmpty(),check('bankName').not().isEmpty()] ,merchantController.bankDetails)
+router.post('/bankDetails', checkAuth , [ check('accountNumber').not().isEmpty(),check('swiftCode').not().isEmpty(),check('bankName').not().isEmpty()] ,merchantController.bankDetails)
 
 //Remaing Balance
-router.post('/remainingBalance',merchantController.getRemainingBalance);
+router.get('/remainingBalance', checkAuth ,merchantController.getRemainingBalance);
 
 //get merchant bank Details
-router.post('/getMerchantBankDetails',merchantController.getMerchantBankDetails);
+router.get('/getMerchantBankDetails',checkAuth ,merchantController.getMerchantBankDetails);
 
 //update merchant profile
-router.post('/profile',fileUpload.single('profilePic'), merchantController.updateMerchantProfile);
+router.post('/profile',checkAuth ,fileUpload.single('profilePic'), merchantController.updateMerchantProfile);
 
 //get full merchant details 
-router.post('/completeProfile',merchantController.getCompleteMerchantDetails);
+router.get('/completeProfile', checkAuth ,merchantController.getCompleteMerchantDetails);
 
 module.exports = router;

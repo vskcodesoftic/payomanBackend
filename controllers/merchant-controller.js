@@ -272,9 +272,11 @@ const newPasswordReset = async(req,res,next) => {
         const error =  new HttpError("invalid input are passed,please pass valid data",422)
         return next(error)
     }
+    //  const test = req.params.token;
+    //  console.log(test);
     
         const newPassword = req.body.password
-        const sentToken = req.body.token
+        const sentToken = req.params.token
         Merchant.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
         .then(user=>{
             if(!user){
@@ -303,7 +305,8 @@ const bankDetails = async(req,res,next) => {
         const error =  new HttpError("invalid input are passed,please pass valid data",422)
         return next(error)
     }
-    const { userId  , accountNumber , bankName, swiftCode } = req.body;
+    const { accountNumber , bankName, swiftCode } = req.body;
+    const userId = req.userData.userId;
 
     let merchant
     try{
@@ -345,7 +348,7 @@ const bankDetails = async(req,res,next) => {
 
 //showing remaing Balance of Merchant
 const getRemainingBalance = async(req,res ,next) => {
-    const { userId  } = req.body;
+    const userId = req.userData.userId;
     let merchant
     try{
          merchant = await Merchant.findOne({ _id : userId  })
@@ -365,7 +368,7 @@ const getRemainingBalance = async(req,res ,next) => {
 
 //get Merchant Bank Details
 const getMerchantBankDetails = async(req,res ,next) => {
-    const { userId  } = req.body;
+    const userId = req.userData.userId;
     let merchant
     try{
          merchant = await Merchant.findOne({ _id : userId  })
@@ -390,7 +393,8 @@ const getMerchantBankDetails = async(req,res ,next) => {
 
 //profile updated 
 const updateMerchantProfile = async (req,res,next) => {
-    const { accountNumber, bankName, swiftCode ,userId } = req.body;
+    const userId = req.userData.userId;
+    const { accountNumber, bankName, swiftCode  } = req.body;
      
     let existingUser
     try{
@@ -436,7 +440,7 @@ const updateMerchantProfile = async (req,res,next) => {
 
 // get complete merchant details 
 const getCompleteMerchantDetails = async (req, res, next) => {
-    const { userId  } = req.body;
+    const userId = req.userData.userId;
     let merchant
     try{
          merchant = await Merchant.findOne({ _id : userId })
@@ -449,7 +453,7 @@ const getCompleteMerchantDetails = async (req, res, next) => {
         const error = new HttpError("user not exists",422)
         return next(error)
     }
-    res.json({ message : " complete details of merchant", name : merchant.name, email : merchant.email , businessName : merchant.businessName, countryCode : merchant.countryCode , phoneNumber : merchant.phoneNumber , accountNumber : merchant.accountNumber, swiftCode :merchant.swiftCode ,bankName : merchant.bankName })
+    res.json({ message : " complete details of merchant", name : merchant.name, email : merchant.email , businessName : merchant.businessName, countryCode : merchant.countryCode , phoneNumber : merchant.phoneNumber , accountNumber : merchant.accountNumber, swiftCode :merchant.swiftCode ,bankName : merchant.bankName , profilePic : merchant.profilePic})
 }
 
 exports.createMerchant =    createMerchant;

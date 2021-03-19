@@ -10,7 +10,7 @@ const  Customer = require('../models/customer-schema')
 
 const HttpError = require('../models/http-error');
 
-const {  sendEmail  ,sendEmailOtpLink } = require('../services/mail.service');
+const {  sendEmail  ,sendEmailOtpLink, sendEmailOtpLinktoCustomer } = require('../services/mail.service');
 
 
 //Customer signup
@@ -292,7 +292,7 @@ const forgetCustomerPassword = async (req, res ,next) => {
             user.expireToken = Date.now() + 3600000
             user.save().then((result)=>{
           
-           sendEmailOtpLink(
+           sendEmailOtpLinktoCustomer(
                     user.email,
                     token 
                     
@@ -318,9 +318,9 @@ const newPasswordReset = async(req,res,next) => {
         const error =  new HttpError("invalid input are passed,please pass valid data",422)
         return next(error)
     }
-    const { token, password } = req.body;
+    const {  password } = req.body;
         const newPassword = password
-        const sentToken = token
+        const sentToken = req.params.token
         Customer.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
         .then(user=>{
             if(!user){
@@ -341,6 +341,25 @@ const newPasswordReset = async(req,res,next) => {
 
 }
 
+//get profile details of customer
+const getProfileDetails = async(req, res, next) => {
+    const userId = req.userData.userId;
+    let customer
+    try{
+         customer = await Customer.findOne({ _id : userId })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, updating failed",500)
+        return next(error)
+    }
+    if(!customer){
+        const error = new HttpError("user not exists",422)
+        return next(error)
+    }
+    res.json({ message : " complete details of customer", name : customer.name, email : customer.email ,  countryCode : customer.countryCode , phoneNumber : customer.phoneNumber ,profilPic : customer.profilePic})
+}
+
+
 
 exports.createCustomer =  createCustomer;
 exports.customerLogin = customerLogin;
@@ -348,4 +367,5 @@ exports.updateCustomerPassword = updateCustomerPassword;
 exports.updateCustomerProfile = updateCustomerProfile;
 exports.forgetCustomerPassword = forgetCustomerPassword;
 exports.newPasswordReset = newPasswordReset;
+exports.getProfileDetails = getProfileDetails;
 
