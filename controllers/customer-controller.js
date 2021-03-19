@@ -270,10 +270,8 @@ const updateCustomerProfile = async(req, res, next) => {
 
 
 
-
 exports.createCustomer =    createCustomer;
 exports.customerLogin = customerLogin;
 exports.updateCustomerPassword = updateCustomerPassword; 
 exports.updateCustomerProfile = updateCustomerProfile;
 
-exports.protectedRoute = protectedRoute;

@@ -37,5 +37,4 @@ router.post('/updatePassword'  ,[ check('email').isEmail(), check('oldpassword')
  router.post('/profile', checkAuth , fileUpload.single('profilePic'), customerController.updateCustomerProfile);
 
 
-router.get('/prc',checkAuth ,customerController.protectedRoute)
 module.exports = router;
