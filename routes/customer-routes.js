@@ -5,6 +5,9 @@ const router = express.Router();
 
 const customerController = require('../controllers/customer-controller')
 
+const checkAuth = require('../middleware/authService');
+
+const fileUpload = require('../middleware/fileUpload');
 
 router.get('/', (req, res, next) => {
  
@@ -28,9 +31,11 @@ router.post('/signup',
 router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpty()], customerController.customerLogin)
 
 //update CustomerPassword 
-router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], customerController.updateCustomerPassword)
+router.post('/updatePassword'  ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], customerController.updateCustomerPassword)
 
 //update Profile (picture)
-router.post('/profile',fileUpload.single('profilePic'), customerController.updateMerchantProfile);
+ router.post('/profile', checkAuth , fileUpload.single('profilePic'), customerController.updateCustomerProfile);
 
+
+router.get('/prc',checkAuth ,customerController.protectedRoute)
 module.exports = router;

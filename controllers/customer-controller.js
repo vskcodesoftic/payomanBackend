@@ -225,9 +225,58 @@ catch(err){
 }
 
 
+//update customer Profile
+const updateCustomerProfile = async(req, res, next) => {    
+     const userId = req.userData.userId;
 
+    let existingUser
+    try{
+         existingUser = await Customer.findOne({ _id : userId })
+    }
+    catch(err){
+        const error = await new HttpError("something went wrong, updating failed",500)
+        return next(error)
+    }
+    if(!existingUser){
+        const error = new HttpError("user not exists",422)
+        return next(error)
+    }
+
+      //updating customer profile pic
+      let user
+      try {
+       user = await Customer.updateOne(
+          { _id: userId },
+          {
+            profilePic : req.file.path 
+          }
+        );
+      }
+      catch(err){
+          console.log("error",err)
+          const error = await new HttpError("something went wrong, in failed",500)
+          return next(error)
+        }
+        if(!user){
+          const error = new HttpError("customer not found could not update profile details",401)
+          return next(error)
+        }
+
+ res.json({message :" profile updated "})
+
+
+}
+
+
+const protectedRoute = (req, res, next) => {
+    const email = req.userData.userId
+    res.json({message : "protected route", userId : email})
+}
 
 
 exports.createCustomer =    createCustomer;
 exports.customerLogin = customerLogin;
 exports.updateCustomerPassword = updateCustomerPassword; 
+exports.updateCustomerProfile = updateCustomerProfile;
+
+exports.protectedRoute = protectedRoute;
