@@ -39,5 +39,7 @@ router.post('/updatePassword'  ,[ check('email').isEmail(), check('oldpassword')
 //Forget Customer Password
 router.post('/forgetPassword' ,[ check('email').isEmail()], customerController.forgetCustomerPassword)
 
-//
+//newPassword Reset after reciving resetLink on email
+router.post('/resetPasswordLink', customerController.newPasswordReset);
+
 module.exports = router;

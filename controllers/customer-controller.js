@@ -307,6 +307,8 @@ const forgetCustomerPassword = async (req, res ,next) => {
 
 }
 
+
+
 // new password reset link when user clicks
 
 const newPasswordReset = async(req,res,next) => {
@@ -316,9 +318,9 @@ const newPasswordReset = async(req,res,next) => {
         const error =  new HttpError("invalid input are passed,please pass valid data",422)
         return next(error)
     }
-    
-        const newPassword = req.body.password
-        const sentToken = req.body.token
+    const { token, password } = req.body;
+        const newPassword = password
+        const sentToken = token
         Customer.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
         .then(user=>{
             if(!user){
