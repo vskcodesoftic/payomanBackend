@@ -269,9 +269,81 @@ const updateCustomerProfile = async(req, res, next) => {
 
 
 
+//forget Customer Password   sending email with reset password Link
+const forgetCustomerPassword = async (req, res ,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
+    const { email } = req.body;
+    crypto.randomBytes(32,(err,buffer)=>{
+        if(err){
+            console.log(err)
+        }
+        const token = buffer.toString("hex")
+        Customer.findOne({email:req.body.email})
+        .then(user=>{
+            if(!user){
+                return res.status(422).json({error:"User dont exists with that email"})
+            }
+            user.resetToken = token
+            user.expireToken = Date.now() + 3600000
+            user.save().then((result)=>{
+          
+           sendEmailOtpLink(
+                    user.email,
+                    token 
+                    
+                )
+                res.json({message:"check your email", token : token})
+  
+            })
+           
+  
+        })
+    })
 
-exports.createCustomer =    createCustomer;
+}
+
+// new password reset link when user clicks
+
+const newPasswordReset = async(req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors);
+        const error =  new HttpError("invalid input are passed,please pass valid data",422)
+        return next(error)
+    }
+    
+        const newPassword = req.body.password
+        const sentToken = req.body.token
+        Customer.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+        .then(user=>{
+            if(!user){
+                return res.status(422).json({error:"Try again session expired"})
+            }
+            bcrypt.hash(newPassword,12).then(hashedpassword=>{
+               user.password = hashedpassword
+               user.resetToken = undefined
+               user.expireToken = undefined
+               user.save().then((saveduser)=>{
+                   res.json({message:"password updated success"})
+               })
+            })
+        }).catch(err=>{
+            console.log(err)
+        })
+    
+
+}
+
+
+exports.createCustomer =  createCustomer;
 exports.customerLogin = customerLogin;
 exports.updateCustomerPassword = updateCustomerPassword; 
 exports.updateCustomerProfile = updateCustomerProfile;
+exports.forgetCustomerPassword = forgetCustomerPassword;
+exports.newPasswordReset = newPasswordReset;
 

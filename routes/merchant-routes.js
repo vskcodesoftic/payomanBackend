@@ -32,10 +32,8 @@ router.post('/login' ,[ check('email').isEmail(), check('password').not().isEmpt
 router.post('/updatePassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], merchantController.updateMerchantPassword)
 
 //Forget Merchant Password
-router.post('/forgetPassword' ,[ check('email').isEmail(), check('oldpassword').not().isEmpty(),check('newpassword').not().isEmpty()], merchantController.updateMerchantPassword)
+router.post('/forgetPassword' ,[ check('email').isEmail()], merchantController.forgetMerchantPassword)
 
-//PASSWORD RESET LINK
-router.post('/resetPasswordLink',merchantController.forgetMerchantPassword);
 
 //new password rest link , when user clicks link in the email
 router.post('/changePassword', merchantController.newPasswordReset);

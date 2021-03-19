@@ -36,5 +36,8 @@ router.post('/updatePassword'  ,[ check('email').isEmail(), check('oldpassword')
 //update Profile (picture)
  router.post('/profile', checkAuth , fileUpload.single('profilePic'), customerController.updateCustomerProfile);
 
+//Forget Customer Password
+router.post('/forgetPassword' ,[ check('email').isEmail()], customerController.forgetCustomerPassword)
 
+//
 module.exports = router;

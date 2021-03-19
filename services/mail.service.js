@@ -54,8 +54,8 @@ const sendEmailOtpLink = async (to,token) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'testing.codesoftic@gmail.com',
-          pass: 'Codesoftic@08'
+          user: 'sivakrishnavegi.lpu@gmail.com',
+          pass: 'Krishna@2'
         }
       });
       

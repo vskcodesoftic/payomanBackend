@@ -225,7 +225,7 @@ catch(err){
 }
 
 
-//forget merchant password 
+//forget merchant password  SENDING RESET LINK
 const  forgetMerchantPassword = async(req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
