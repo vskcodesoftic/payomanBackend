@@ -33,7 +33,7 @@ Open endpoints require no Authentication.
 *  [profile] : `POST /api/customer/profile`
 
 
-do replace server with actual production url   >env>server
+do replace server with actual production url   >env>SERVER
 
 
 ## DevelopedByCodeSoftic
