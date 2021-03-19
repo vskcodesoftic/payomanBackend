@@ -63,6 +63,9 @@ email:
 
 * [resetPasswordLink] : `POST /api/merchant/resetPasswordLink/:token`
 
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
+
 forget password fields:
 when user clicks on resetPassword Link , he can enter the new password of his choice
 ```sh
@@ -90,6 +93,9 @@ swiftCode :
 
 * [remainingBalance] : `GET /api/merchant/remainingBalance`
 
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
+
    Response
 
 default : 00
@@ -102,6 +108,9 @@ balance :
 
 * [getMerchantBankDetails] : `GET /api/merchant/resetPasswordLink/getMerchantBankDetails`  
 
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
+
    Response :
 
 ```sh
@@ -111,7 +120,10 @@ swiftCode :
 ```
 
 * [profile] : `POST /api/merchant/profile`
-  
+
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
+
 ```sh
 accountNumber : 
 bankName :
@@ -120,6 +132,9 @@ profilePic : req.file.path (pic a file)
 ```
 
 * [completeProfile] : `GET /api/merchant/completeProfile`
+
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
 
    Response
 
@@ -188,6 +203,8 @@ password:
 
 * [profile] : `GET /api/customer/profile`
 
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
 
 ```sh
 name : 
@@ -198,6 +215,10 @@ profilePic:
 ```
 
 * [profile] : `POST /api/customer/profile`
+
+type : protected Route (require a bearer Token while testing on postman )
+pass token : 'tokenValue'
+
 
 ```sh
 profiePic :
